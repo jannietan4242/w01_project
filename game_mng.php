@@ -82,9 +82,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="product_import.php">
+            <a class="nav-link" href="banner_list.php">
               <span data-feather="layers"></span>
-              Product Import
+              Banner Management
             </a>
           </li>
         </ul>
@@ -122,6 +122,8 @@
 
       <h2>Game Details</h2>
       <div class="table-responsive">
+      <form action="game_setting.php" method="POST">
+        
         <table class="table table-striped table-sm">
           <thead>
             <tr>
@@ -129,9 +131,10 @@
               <th>Title</th>
               <th width="10%">Photo</th>
               <th>Venue</th>
-              <th width="40%">Story</th>
+              <th width="30%">Story</th>
               <th>Upload date</th>
               <th>Action</th>
+              <th>Setting <input type="submit" value="Update" class="btn btn-warning"/></th>
             </tr>
           </thead>
           <tbody>
@@ -148,9 +151,45 @@
               <td><?=$row['story']?></td>
               <td><?=$row['created_date']?></td>
               <td>
-                <a href="game_edit.php?id=<?=$row['id']?>" class="btn btn-xs btn-info">Edit</a>
-                <a href="game_del.php?id=<?=$row['id']?>" class="btn btn-xs btn-danger">Delete</a>
+                <a href="game_edit.php?id=<?=$row['id']?>" class="btn btn-xs btn-info" style="width: 70px;">Edit</a>
+                <a href="game_del.php?id=<?=$row['id']?>" class="btn btn-xs btn-danger" style="width: 70px;">Delete</a>
+                <div><button class="btn btn-warning" style="width: 70px;" id="c<?=$row['id']?>" onclick="toggleShow('<?=$row['id']?>')"><?=$row['is_hide']?'hide':'show'?></button></div>
               </td>
+              
+              <td>
+              <div>
+                  <label for="game_interval">Interval:</label><br>
+                  <input type="number" min="0" step="5" style="width:50px;" value="<?=$row['game_interval']?>" name="game_interval[]"> minutes
+                  <input type="hidden" value="<?=$row['id']?>" name="idinterval[]"/>
+                </div>
+                <div>
+                  <label for="game_duration">Game duration:</label><br>
+                  <input type="number" min="0" step="5" style="width:50px;" value="<?=$row['game_duration']?>" name="game_duration[]"> minutes
+                  <input type="hidden" value="<?=$row['id']?>" name="idgame_duration[]"/>
+                </div>
+                <div>
+                  <label for="starttime">Start time:</label><br>
+                  <input type="time" value="<?=$row['start_time']?>" name="starttime[]">
+                  <input type="hidden" value="<?=$row['id']?>" name="idstart[]"/>
+                </div>
+                <div>
+                  <label for="endtime">End time:</label><br>
+                  <input type="time" value="<?=$row['end_time']?>" name="endtime[]">
+                  <input type="hidden" value="<?=$row['id']?>" name="idend[]"/>
+                </div>
+                <div>
+                  <label for="min">Min pax:</label>
+                  <input type="number" min="1" style="width:50px;" value="<?=$row['min']?>" name="min[]">
+                  <input type="hidden" value="<?=$row['id']?>" name="idmin[]"/>
+                </div>
+                <div>
+                  <label for="max">Max pax:</label>
+                  <input type="number" min="1" style="width:50px;" value="<?=$row['max']?>" name="max[]">
+                  <input type="hidden" value="<?=$row['id']?>" name="idmax[]"/>
+                </div>
+               
+              </td>
+              
             </tr>
 
             <?php
@@ -159,7 +198,8 @@
             ?>
           </tbody>
         </table>
-
+        
+        </form>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             <?php
@@ -214,3 +254,14 @@
 <?php
   include "backend_footer.php";
 ?>
+
+<script>
+  function toggleShow(game_id){
+    $.post("toggle_show.php", {
+      game_id: game_id
+    }, function(res){
+      $("#c"+game_id).html(res);
+    });
+    
+  }
+</script>

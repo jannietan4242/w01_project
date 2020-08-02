@@ -1,7 +1,7 @@
 <?php
 include "header.php";
 include "db.php";
-    $sql = mysqli_query($link, "SELECT * FROM game ORDER BY created_date DESC") or die (mysqli_error($link));
+    $sql = mysqli_query($link, "SELECT * FROM game WHERE is_deleted = 0 AND is_hide = 0 ORDER BY created_date DESC") or die (mysqli_error($link));
 ?>
 
 <main role="main">
@@ -32,8 +32,7 @@ include "db.php";
               <p class="card-text"><?=$row['title']?></p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary"><a href="detail.php?id=<?=$row['id']?>">View</a></button>
-                  
+                  <a href="detail.php?id=<?=$row['id']?>" class="btn btn-sm btn-outline-secondary">View</a>
                 </div>
                 
               </div>

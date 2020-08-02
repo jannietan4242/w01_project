@@ -1,18 +1,9 @@
 <?php
   include "backend_header.php";
   include "db.php";
-  
-  $q      = isset($_GET['q'])?$_GET['q']:'';
 
   //total rows
-  $sql = mysqli_query($link, "SELECT * FROM venue WHERE is_deleted=0 AND venue LIKE '%".$q."%' ");
-  
-
-  if(!empty($q)) {
-    $sql = mysqli_query($link, "SELECT * FROM venue WHERE is_deleted=0 AND venue LIKE '%".$q."%' ");
-  } else {
-    $sql = mysqli_query($link, "SELECT * FROM venue WHERE is_deleted=0 ");
-  }
+  $sql = mysqli_query($link, "SELECT * FROM banner WHERE is_deleted=0");
     
 ?>
 
@@ -34,9 +25,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="venue_list.php">
+            <a class="nav-link" href="venue_list.php">
               <span data-feather="file"></span>
-              Venue List<span class="sr-only">(current)</span> 
+              Venue List
             </a>
           </li>
           <li class="nav-item">
@@ -52,9 +43,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="banner_list.php">
+            <a class="nav-link active" href="banner_list.php">
               <span data-feather="layers"></span>
-              Banner Management
+              Banner Management<span class="sr-only">(current)</span> 
             </a>
           </li>
         </ul>
@@ -63,20 +54,12 @@
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h3 class="h3">Venue List</h3>
-        <form method="GET" action="venue_list.php">
-          <input type="search" name="q" placeholder="Search by keywords..." value="<?=isset($_GET['q'])?$_GET['q']:''?>" />
-          <button type="submit" class="btn btn-primary">Search</button>
-          <?php
-          if(!empty($q)) {
-            echo "Total ".mysqli_num_rows($sql)." data have been found.";
-          }
-          ?>
-        </form>
+        <h3 class="h3">Banner List</h3>
+        
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
           
-          <a href="venue_add.php" class="btn btn-sm btn-outline-secondary">Add venue</a>
+          <a href="banner_add.php" class="btn btn-sm btn-outline-secondary">Add banner</a>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
           </div>
          
@@ -91,7 +74,9 @@
           <thead>
           <tr>
               <th>#</th>
-              <th>Venue</th>
+              <th>Title</th>
+              <th width="40%">Photo</th>
+              <th>URL link</th>
               <th>Created Date</th>
               <th>Action</th>
             </tr>
@@ -104,11 +89,13 @@
 
             <tr>
               <td><?=$row['id']?></td>
-              <td><?=$row['venue']?></td>
+              <td><?=$row['title']?></td>
+              <td><img src="<?=$row['photo']?>" class="img-fluid"/></td>
+              <td><?=$row['url']?></td>
               <td><?=$row['created_date']?></td>              
               <td>
-                  <a href="venue_edit.php?id=<?=$row['id']?>" class="btn btn-xs btn-info">Edit</a>
-                  <a href="venue_del.php?id=<?=$row['id']?>" class="btn btn-xs btn-danger">Delete</a>
+                  <a href="banner_edit.php?id=<?=$row['id']?>" class="btn btn-xs btn-info">Edit</a>
+                  <a href="banner_del.php?id=<?=$row['id']?>" class="btn btn-xs btn-danger">Delete</a>
               </td>
             </tr>
 
