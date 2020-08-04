@@ -9,10 +9,12 @@ include "db.php";
         }
 ?>
 
-<div>
+<div style="background-image: url('./uploads/bg.jpg'); width:100%; padding:5%; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
-        <h1>Story</h1>
-        <p><?=$row['story']?></p>
+        <h1 style="font-family:castellar;"><?=$row['title']?></h1><br>
+        <h3 style="font-family:papyrus;">Story</h3><br>
+        <p style="font-family:'Times New Roman';"><?=$row['story']?></p>
+        <a href="booking.php"><button class="btn btn-danger">Book Now</button></a>
 </div>
 
 <?php

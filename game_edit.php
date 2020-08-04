@@ -2,6 +2,15 @@
   include "backend_header.php";
   include "db.php";
 
+  function PIPHP_ImageResize($image, $w, $h){
+    $oldw = imagesx($image);
+    $oldh = imagesy($image);
+    $temp = imagecreatetruecolor($w, $h);
+    imagecopyresampled($temp, $image, 0, 0, 0, 0, $w, $h, $oldw, $oldh);
+    return $temp;
+  }
+
+
   if(isset($_POST['title'])) {
 
     $id = $_POST['id'];
@@ -23,7 +32,21 @@
           $check = getimagesize($_FILES['photo']['tmp_name']);
           if($check['mime']=="image/png" || $check['mime']=="image/jpeg") {
               move_uploaded_file($_FILES['photo']['tmp_name'], "./uploads/".$_FILES['photo']['name']);       
-              $photo = "./uploads/".$_FILES['photo']['name'];      
+              $photo = "./uploads/".$_FILES['photo']['name'];
+              
+              $uploadedImage = imagecreatefromjpeg($photo);
+
+              if (!$uploadedImage) {
+                throw new Exception('The uploaded file is corrupted (or wrong format)');
+              } else {
+                $resizedImage = PIPHP_ImageResize($uploadedImage,350,400);
+                $new_name = "./uploads/".date("YmdHis").".jpg";
+                // save your image on disk
+                if (!imagejpeg ($resizedImage, $new_name)) {
+                      throw new Exception('failed to save resized image');
+                }
+                $photo = $new_name;
+              }
 
               mysqli_query($link, "UPDATE game SET photo = '$photo' WHERE id = '$id'") or die(mysqli_error($link));   
 
@@ -151,3 +174,7 @@
 <?php
   include "backend_footer.php";
 ?>
+
+<script>
+  CKEDITOR.replace("story");
+</script>

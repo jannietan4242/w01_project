@@ -16,6 +16,7 @@
     <title>Backend Dashboard</title>
    <!-- Custom styles for this template -->
    <link href="css/dashboard.css" rel="stylesheet">
+   <script src="ckeditor/ckeditor.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">

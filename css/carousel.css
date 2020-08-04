@@ -2,12 +2,30 @@
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */
 
-body {
+body, html {
     padding-top: 3rem;
     padding-bottom: 3rem;
-    color: #5a5a5a;
+    color: white;
+    background-color: black;
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: cover;
+    height: 100%; 
   }
   
+.bg {
+  background-color: grey;
+  height: 100%; 
+}
+
+.jumbotron {
+  background-color: black;
+}
+
+.album {
+  background-color: black;
+}
+
   
   /* CUSTOMIZE THE CAROUSEL
   -------------------------------------------------- */
