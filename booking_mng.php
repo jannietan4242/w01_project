@@ -33,15 +33,15 @@
     }
 
   //total rows
-  $sql = mysqli_query($link, "SELECT * FROM game WHERE title LIKE '%".$q."%' ");
+  $sql = mysqli_query($link, "SELECT * FROM booking WHERE name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ");
   $total_data_rows = mysqli_num_rows($sql);
   $total_pages = ceil( $total_data_rows / $item_per_page );
 
   //search bar
   if(!empty($q)) {
-    $sql = mysqli_query($link, "SELECT * FROM game WHERE title LIKE '%".$q."%' ".$orderBy." LIMIT ".$start.",".$item_per_page);
+    $sql = mysqli_query($link, "SELECT * FROM booking WHERE name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ".$orderBy." LIMIT ".$start.",".$item_per_page);
   } else {
-    $sql = mysqli_query($link, "SELECT * FROM game ".$orderBy." LIMIT ".$start.",".$item_per_page);
+    $sql = mysqli_query($link, "SELECT * FROM booking ".$orderBy." LIMIT ".$start.",".$item_per_page);
   }
     
 ?>
@@ -58,9 +58,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="booking_mng.php">
+            <a class="nav-link active" href="booking_mng.php">
               <span data-feather="shopping-cart"></span>
-              Booking Management
+              Booking Management<span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
@@ -70,9 +70,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="game_mng.php">
+            <a class="nav-link" href="game_mng.php">
               <span data-feather="bar-chart-2"></span>
-              Game Management<span class="sr-only">(current)</span>
+              Game Management
             </a>
           </li>
           <li class="nav-item">
@@ -93,9 +93,9 @@
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Game</h1>
-        <form method="GET" action="game_mng.php">
-          <input type="search" name="q" placeholder="Search by keywords..." value="<?=isset($_GET['q'])?$_GET['q']:''?>" />
+        <h1 class="h2">Booking list</h1>
+        <form method="GET" action="booking_mng.php">
+          <input type="search" name="q" placeholder="Search by name/mobile/email" value="<?=isset($_GET['q'])?$_GET['q']:''?>" />
           <button type="submit" class="btn btn-primary">Search</button>
           <?php
           if(!empty($q)) {
@@ -111,30 +111,28 @@
               <option value="titleASC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='titleASC'?'selected="selected"':''?>>-Sort By Title alphabet ASC-</option>
               <option value="titleDESC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='titleDESC'?'selected="selected"':''?>>-Sort By Title alphabet DESC-</option>
             </select>
-            <a href="game_add.php" class="btn btn-sm btn-outline-secondary">Add game</a>
             <a href="game_export.php" class="btn btn-sm btn-outline-secondary">Export</a>
           </div>
          
         </div>
       </div>
 
-      
-
-      <h2>Game Details</h2>
       <div class="table-responsive">
-      <form action="game_setting.php" method="POST">
+      <form action="booking_mng.php" method="POST">
         
         <table class="table table-striped table-sm">
           <thead>
             <tr>
               <th>#</th>
-              <th>Title</th>
-              <th width="10%">Photo</th>
-              <th>Venue</th>
-              <th width="30%">Story</th>
-              <th>Upload date</th>
-              <th>Action</th>
-              <th>Setting <input type="submit" value="Update" class="btn btn-warning"/></th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>Number of person</th>
+              <th>Special Note</th>
+              <th width="30%">Game room</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -145,51 +143,18 @@
 
             <tr>
               <td><?=$row['id']?></td>
-              <td><?=$row['title']?></td>
-              <td><img src="<?=$row['photo']?>" class="img-fluid"/></td>
-              <td><?=isset($venue[$row['venue_id']])?$venue[$row['venue_id']]:'N/A'?></td>
-              <td><?=$row['story']?></td>
-              <td><?=$row['created_date']?></td>
-              <td>
-                <a href="game_edit.php?id=<?=$row['id']?>" class="btn btn-xs btn-info" style="width: 70px;">Edit</a>
-                <a href="game_del.php?id=<?=$row['id']?>" class="btn btn-xs btn-danger" style="width: 70px;">Delete</a>
-                <div><button class="btn btn-warning" style="width: 70px;" id="c<?=$row['id']?>" onclick="toggleShow('<?=$row['id']?>')"><?=$row['is_hide']?'hide':'show'?></button></div>
-              </td>
+              <td><?=$row['name']?></td>
+              <td><?=$row['mobile']?></td>
+              <td><?=$row['email']?></td>
+              <td><?=$row['num_of_person']?></td>
+              <td><?=$row['note']?></td>
+              <td><?=$row['game_title']?></td>
+              <td><?=$row['date']?></td>
+              <td><?=$row['time_slot']?></td>
               
               <td>
-              <div>
-                  <label for="game_interval">Interval:</label><br>
-                  <input type="number" min="0" step="5" style="width:50px;" value="<?=$row['game_interval']?>" name="game_interval[]"> minutes
-                  <input type="hidden" value="<?=$row['id']?>" name="idinterval[]"/>
-                </div>
-                <div>
-                  <label for="game_duration">Game duration:</label><br>
-                  <input type="number" min="0" step="5" style="width:50px;" value="<?=$row['game_duration']?>" name="game_duration[]"> minutes
-                  <input type="hidden" value="<?=$row['id']?>" name="idgame_duration[]"/>
-                </div>
-                <div>
-                  <label for="starttime">Start time:</label><br>
-                  <input type="time" value="<?=$row['start_time']?>" name="starttime[]">
-                  <input type="hidden" value="<?=$row['id']?>" name="idstart[]"/>
-                </div>
-                <div>
-                  <label for="endtime">End time:</label><br>
-                  <input type="time" value="<?=$row['end_time']?>" name="endtime[]">
-                  <input type="hidden" value="<?=$row['id']?>" name="idend[]"/>
-                </div>
-                <div>
-                  <label for="min">Min pax:</label>
-                  <input type="number" min="1" style="width:50px;" value="<?=$row['min']?>" name="min[]">
-                  <input type="hidden" value="<?=$row['id']?>" name="idmin[]"/>
-                </div>
-                <div>
-                  <label for="max">Max pax:</label>
-                  <input type="number" min="1" style="width:50px;" value="<?=$row['max']?>" name="max[]">
-                  <input type="hidden" value="<?=$row['id']?>" name="idmax[]"/>
-                </div>
-               
+                <div><button class="btn btn-warning" style="width: 100px;" id="c<?=$row['id']?>" onclick="toggleDeleteBooking('<?=$row['id']?>')"><?=$row['is_deleted']?'cancelled':'confirmed'?></button></div>
               </td>
-              
             </tr>
 
             <?php
@@ -205,20 +170,20 @@
             <?php
             if($page > 1) {
             ?>
-            <li class="page-item"><a class="page-link" href="game_mng.php?page=<?=$page-1?>">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="booking_mng.php?page=<?=$page-1?>">Previous</a></li>
             <?php
             }
 
             for($i=1; $i <= $total_pages; $i++) {
             ?>
-            <li class="page-item <?=$i == $page?'active':''?>"><a class="page-link" href="game_mng.php?page=<?=$i?>"><?=$i?></a></li>
+            <li class="page-item <?=$i == $page?'active':''?>"><a class="page-link" href="booking_mng.php?page=<?=$i?>"><?=$i?></a></li>
             <?php
             }
             ?>            
             <?php
             if($page < $total_pages) {
             ?>
-            <li class="page-item"><a class="page-link" href="game_mng.php?page=<?=$page+1?>">Next</a></li>
+            <li class="page-item"><a class="page-link" href="booking_mng.php?page=<?=$page+1?>">Next</a></li>
             <?php
             }
             ?>
@@ -235,16 +200,16 @@
 
     switch(val){
       case "":
-        location.href='game_mng.php';
+        location.href='booking_mng.php';
         break;
       case "idASC":
-        location.href='game_mng.php?sortby=idASC';
+        location.href='booking_mng.php?sortby=idASC';
         break;
       case "titleASC":
-        location.href='game_mng.php?sortby=titleASC';
+        location.href='booking_mng.php?sortby=titleASC';
         break;
       case "titleDESC":
-        location.href='game_mng.php?sortby=titleDESC';
+        location.href='booking_mng.php?sortby=titleDESC';
         break;
     }
 
@@ -256,11 +221,11 @@
 ?>
 
 <script>
-  function toggleShow(game_id){
-    $.post("toggle_show.php", {
-      game_id: game_id
+  function toggleDeleteBooking(booking_id){
+    $.post("toggleDeleteBooking.php", {
+        booking_id: booking_id
     }, function(res){
-      $("#c"+game_id).html(res);
+      $("#c"+booking_id).html(res);
     });
     
   }

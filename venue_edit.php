@@ -33,9 +33,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="order_mng.php">
+            <a class="nav-link" href="booking_mng.php">
               <span data-feather="shopping-cart"></span>
-              Order Management
+              Booking Management
             </a>
           </li>
           <li class="nav-item">

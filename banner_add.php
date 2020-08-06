@@ -70,15 +70,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file"></span>
-              Order List
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="booking_mng.php">
               <span data-feather="shopping-cart"></span>
-              Order Management
+              Booking Management
             </a>
           </li>
           <li class="nav-item">
@@ -88,9 +82,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="product_mng.php">
+            <a class="nav-link" href="game_mng.php">
               <span data-feather="bar-chart-2"></span>
-              Product Management
+              Game Management
             </a>
           </li>
           <li class="nav-item">
@@ -100,7 +94,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="banner_list">
+            <a class="nav-link active" href="banner_list.php">
               <span data-feather="layers"></span>
               Banner Management<span class="sr-only">(current)</span>
             </a>

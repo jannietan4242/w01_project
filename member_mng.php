@@ -46,9 +46,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="order_mng.php">
+            <a class="nav-link" href="booking_mng.php">
               <span data-feather="shopping-cart"></span>
-              Order Management
+              Booking Management
             </a>
           </li>
           <li class="nav-item">
@@ -70,9 +70,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="product_import.php">
+            <a class="nav-link" href="banner_list.php">
               <span data-feather="layers"></span>
-              Product Import
+              Banner Management
             </a>
           </li>
         </ul>

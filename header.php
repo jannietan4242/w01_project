@@ -13,6 +13,7 @@
     <title>Lost in JB</title>
     <!-- Custom styles for this template -->
     <link href="css/carousel.css?v=0.01" rel="stylesheet">
+    
   </head>
   <body>
     <header>
