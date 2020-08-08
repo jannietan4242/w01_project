@@ -34,15 +34,15 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="member_mng.php">             
+            <a class="nav-link" href="admin_mng.php">             
               <span data-feather="users"></span>
-              Member Management
+              Admin Management
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="product_import.php">
+            <a class="nav-link" href="banner_list.php">
               <span data-feather="layers"></span>
-              Product Import
+              Banner  Management
             </a>
           </li>
         </ul>
@@ -54,13 +54,12 @@
         <h2 class="h2">Dashboard</h2>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-           
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+        
           </div>
          
         </div>
       </div>
-      <h4>Product category</h4>
+      <h4>Booking Statistics</h4>
       <div id="piechart" style="width: 100%; height: 500px;"></div>
       
     </main>
@@ -72,8 +71,15 @@
   $blog_category_array = [];
   $blog_category_array[] = ["Category","Product Count"];
 
-  $sql = mysqli_query($link, "SELECT * FROM product_category");
+  // get latest date
+  $latest_date = "";
+  $sql = mysqli_query($link, "SELECT * FROM booking ORDER BY created_date DESC LIMIT 1");
     if(mysqli_num_rows($sql) > 0) {
+      $row = mysqli_fetch_array($sql);
+
+      $latest_date = substr($row['created_date'],0,10);
+
+
       while($row = mysqli_fetch_array($sql)) {
 
         $count = 0;
@@ -100,7 +106,8 @@
         var data = google.visualization.arrayToDataTable(<?=json_encode($blog_category_array)?>);
 
         var options = {
-          title: 'Product category statistics'
+          title: 'Booking by Game Rooms',
+          legend: { position: 'bottom'}
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));

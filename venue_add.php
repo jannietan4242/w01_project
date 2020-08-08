@@ -21,15 +21,9 @@
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="dashboard.php">
               <span data-feather="home"></span>
               Dashboard 
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file"></span>
-              Order List
             </a>
           </li>
           <li class="nav-item">
@@ -39,21 +33,21 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="venue_list.php">
+            <a class="nav-link active" href="venue_list.php">
               <span data-feather="bar-chart-2"></span>
               Venue List<span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="product_mng.php">
+            <a class="nav-link" href="game_mng.php">
               <span data-feather="bar-chart-2"></span>
-              Product Management
+              Game Management
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">             
+            <a class="nav-link" href="admin_mng.php">             
               <span data-feather="users"></span>
-              Member Management
+              Admin Management
             </a>
           </li>
           <li class="nav-item">

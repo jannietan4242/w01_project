@@ -62,7 +62,7 @@ include "db.php";
                <?php
                   foreach($timeslot as $v) {
                ?>
-                <div class="col-xs-12" style="display:block;"><button data-toggle="modal" data-target="#bookmodal" onclick="openModal('<?=$row['title']?>','<?=$v['starttime']?> - <?=$v['endtime']?> ','<?=$row['min']?> - <?=$row['max']?> ')"><?=$v['starttime']?> - <?=$v['endtime']?></button></div>
+                <div class="col-xs-12" style="display:block;"><button data-toggle="modal" data-target="#bookmodal" onclick="openModal('<?=$row['title']?>','<?=$v['starttime']?> - <?=$v['endtime']?> ','<?=$row['min']?>', '<?=$row['max']?>' )"><?=$v['starttime']?> - <?=$v['endtime']?></button></div>
                 
               <?php
                   }
@@ -87,20 +87,22 @@ include "db.php";
     <div class="modal-content">
     <form action="booking2.php" method="POST">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Booking Game Room: <span id="gameName"></span></h5>
-        
+        <h5 class="modal-title" id="modalTitle">Booking Game Room: <span type="text" id="gameName1"></span></h5>
+
+        <input type="hidden" id="gameName" name="gameName">
+        <input type="hidden" id="time1" name="time1">
+        <input type="text" id="date1" name="date1">
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      <p class="modal-title" id="modalDate">Date: <span id="date"></span></p>
+      <p class="modal-title" id="modalDate">Date: <span id="date2"></span></p>
       <p class="modal-title" id="modalTime">Time: <span id="time"></span></p>
-      <p class="modal-title" id="modalPerson">Number of person: <span id="person"></span></p>
+      <p class="modal-title" id="modalPerson">Number of person: <span id="min"></span> - <span id="max"></span></p>
       
-      <label for="game_title" class="col-form-label">testing value</label>
-        <input type="text" class="form-control" id="myTitle" name="game_title" value="">
-        <input type="hidden" class="form-control" id="time" name="time_slot" >
+     
 
           <div class="form-group">
             <label for="name" class="col-form-label">Your name:</label>
@@ -154,23 +156,28 @@ include "db.php";
     //    });
     //  }
 
-    function openModal(game_title,time_slot,person) {
+    function openModal(game_title,time_slot,min,max) {
 
-      
-        $("#gameName").text(game_title);
+        $("#gameName").val(game_title);
+        $("#gameName1").text(game_title);
         $("#time").text(time_slot);
+        $("#time1").val(time_slot);
+        // $("#date1").val()= $("#date").val();        
+        document.getElementById("date1").value = document.getElementById("date").value; 
+        // document.getElementById("date2").value = document.getElementById("date").value; 
+        $("#date2").val(document.getElementById("date").value);
+
+        $("#min").text(min);
+        $("#max").text(max);
         
-        $("#person").text(person);
 
         $("#name").val('');
         $("#mobile").val('');
         $("#email").val('');
         $("#num_per").val('');
         $("#note").val('');
-        $('#myModal').modal('show');
+        $('#myModal').modal('show');    
 
-        $("#myTitle").val(game_title);
-       
     }    
 
 </script>

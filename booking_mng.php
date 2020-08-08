@@ -76,9 +76,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="member_mng.php">             
+            <a class="nav-link" href="admin_mng.php">             
               <span data-feather="users"></span>
-              Member Management
+              Admin Management
             </a>
           </li>
           <li class="nav-item">
@@ -129,7 +129,7 @@
               <th>Email</th>
               <th>Number of person</th>
               <th>Special Note</th>
-              <th width="30%">Game room</th>
+              <th width="15%">Game room</th>
               <th>Date</th>
               <th>Time</th>
               <th>Status</th>

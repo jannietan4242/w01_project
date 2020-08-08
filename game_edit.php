@@ -106,9 +106,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="member_mng.php">             
+            <a class="nav-link" href="admin_mng.php">             
               <span data-feather="users"></span>
-              Member Management
+              Admin Management
             </a>
           </li>
           <li class="nav-item">

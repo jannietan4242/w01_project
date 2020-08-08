@@ -23,13 +23,13 @@
   }
 
   //total rows
-//   $sql = mysqli_query($link, "SELECT * FROM member WHERE name LIKE '%".$q."%' ") or die(mysqli_error($link));
+//   $sql = mysqli_query($link, "SELECT * FROM admin WHERE name LIKE '%".$q."%' ") or die(mysqli_error($link));
   
 
   if(!empty($q)) {
-    $sql = mysqli_query($link, "SELECT * FROM customer WHERE email LIKE '%".$q."%' ".$orderBy) or die(mysqli_error($link));
+    $sql = mysqli_query($link, "SELECT * FROM admin WHERE name LIKE '%".$q."%' ".$orderBy) or die(mysqli_error($link));
   } else {
-    $sql = mysqli_query($link, "SELECT * FROM customer ".$orderBy) or die(mysqli_error($link));
+    $sql = mysqli_query($link, "SELECT * FROM admin ".$orderBy) or die(mysqli_error($link));
   }
     
 ?>
@@ -64,9 +64,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="member_mng.php">             
+            <a class="nav-link active" href="admin_mng.php">             
               <span data-feather="users"></span>
-              Member Management<span class="sr-only">(current)</span>
+              Admin Management<span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
@@ -81,8 +81,8 @@
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h3 class="h3">Member Management</h3>
-        <form method="GET" action="member_mng.php">
+        <h3 class="h3">Admin Management</h3>
+        <form method="GET" action="admin_mng.php">
           <input type="search" name="q" placeholder="Search by keywords..." value="<?=isset($_GET['q'])?$_GET['q']:''?>" />
           <button type="submit" class="btn btn-primary">Search</button>
           <?php
@@ -99,8 +99,6 @@
               <option value="titleASC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='titleASC'?'selected="selected"':''?>>-Sort By Item alphabet ASC-</option>
               <option value="titleDESC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='titleDESC'?'selected="selected"':''?>>-Sort By Item alphabet DESC-</option>
             </select>
-          <a href="product_category_add.php" class="btn btn-sm btn-outline-secondary">Add Product Category</a>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
           </div>
           
         </div>
@@ -133,7 +131,7 @@
               <td><?=$row['email']?></td>
               <td><?=$row['created_date']?></td>              
               <td>
-                  <a href="member_mng_details.php?id=<?=$row['id']?>" class="btn btn-xs btn-info">View</a>
+                <div><button class="btn btn-warning" style="width: 100px;" id="c<?=$row['id']?>" onclick="toggleDeleteAdmin('<?=$row['id']?>')"><?=$row['is_deleted']?'inactive':'active'?></button></div>
               </td>
             </tr>
 
@@ -156,16 +154,16 @@
 
     switch(val){
       case "":
-        location.href='member_mng.php';
+        location.href='admin_mng.php';
         break;
       case "idASC":
-        location.href='member_mng.php?sortby=idASC';
+        location.href='admin_mng.php?sortby=idASC';
         break;
       case "titleASC":
-        location.href='member_mng.php?sortby=titleASC';
+        location.href='admin_mng.php?sortby=titleASC';
         break;
       case "titleDESC":
-        location.href='member_mng.php?sortby=titleDESC';
+        location.href='admin_mng.php?sortby=titleDESC';
         break;
     }
 
@@ -175,3 +173,14 @@
 <?php
   include "backend_footer.php";
 ?>
+
+<script>
+  function toggleDeleteAdmin(admin_id){
+    $.post("toggleDeleteAdmin.php", {
+      admin_id: admin_id
+    }, function(res){
+      $("#c"+admin_id).html(res);
+    });
+    
+  }
+</script>
