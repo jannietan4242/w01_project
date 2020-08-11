@@ -112,7 +112,6 @@
               <option value="titleDESC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='titleDESC'?'selected="selected"':''?>>-Sort By Title alphabet DESC-</option>
             </select>
             <a href="game_add.php" class="btn btn-sm btn-outline-secondary">Add game</a>
-            <a href="game_export.php" class="btn btn-sm btn-outline-secondary">Export</a>
           </div>
          
         </div>

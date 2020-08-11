@@ -78,14 +78,14 @@
   // booking analysis
   // get latest date
   $latest_date = "";
-  $sql = mysqli_query($link, "SELECT * FROM booking ORDER BY date DESC LIMIT 1");
+  $sql = mysqli_query($link, "SELECT * FROM booking WHERE is_deleted = 0 ORDER BY date DESC LIMIT 1");
   if(mysqli_num_rows($sql) > 0) {
     $row = mysqli_fetch_array($sql);
     $latest_date = substr($row['date'],0,10);//YYYY-mm-dd
   }
 
   $earliest_date = "";
-  $sql = mysqli_query($link, "SELECT * FROM booking ORDER BY date ASC LIMIT 1");
+  $sql = mysqli_query($link, "SELECT * FROM booking WHERE is_deleted = 0 ORDER BY date ASC LIMIT 1");
   if(mysqli_num_rows($sql) > 0) {
     $row = mysqli_fetch_array($sql);
     $earliest_date = substr($row['date'],0,10);//YYYY-mm-dd
@@ -100,7 +100,7 @@
   for($i = $start_date_ut; $i <= $end_date_ut; $i=$i+24*3600) {
     
     $total_count = 0;
-    $sql = mysqli_query($link, "SELECT COUNT(id) AS total_booking FROM booking WHERE date LIKE '".date("Y-m-d", $i)."%'");
+    $sql = mysqli_query($link, "SELECT COUNT(id) AS total_booking FROM booking WHERE is_deleted = 0 AND date LIKE '".date("Y-m-d", $i)."%'");
     if(mysqli_num_rows($sql) > 0){
       $row = mysqli_fetch_array($sql);
       $total_count = !empty($row['total_booking'])?(int)$row['total_booking']:0;
@@ -116,7 +116,7 @@
   if(mysqli_num_rows($sql) > 0) {
     while($row1 = mysqli_fetch_array($sql)){
       $count = 0;
-      $sql2 = mysqli_query($link, "SELECT COUNT(id) AS total_count FROM booking WHERE game_title = '".$row1['title']."'") or die(mysqli_error($link));
+      $sql2 = mysqli_query($link, "SELECT COUNT(id) AS total_count FROM booking WHERE is_deleted = 0  AND game_title = '".$row1['title']."'") or die(mysqli_error($link));
       if(mysqli_num_rows($sql2) > 0) {
         $row2 = mysqli_fetch_array($sql2);
         $count = $row2['total_count'];

@@ -4,7 +4,8 @@
 ?>
 
 <main role="main">
-
+<div style="background-image: url('./uploads/contact_background.jpg'); width:100%; padding:5%; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
+  <div class="album">
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="<?=$bannerRow['id']?>" class="active"></li>
@@ -133,9 +134,9 @@
     <hr class="featurette-divider">
 
     <!-- /END THE FEATURETTES -->
-
+    
   </div><!-- /.container -->
-
+  </div>
 <?php
   include "footer.php";
 ?>

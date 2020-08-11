@@ -32,8 +32,8 @@
         <p class="lead">Tel: 017-5800833</p>
         <p class="lead">From Mon to Sun 12:30pm to 11:30pm 7days per week.</p>
       </div>
-      <div id="googleMap1" class="col-md-5">
-        
+      <div class="col-md-5">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.420154575883!2d103.6659663138046!3d1.5168864988937765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da73a70a144bc3%3A0x520c6faa10033760!2sJb%20Lost%20In%20The%20Haunted%20House!5e0!3m2!1sen!2smy!4v1597144598397!5m2!1sen!2smy" width="450" height="400" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
       </div>
       
     </div>
@@ -47,8 +47,8 @@
         <p class="lead">Tel: 07-3645043</p>
         <p class="lead">From Mon to Sun 12:30pm to 11:30pm 7days per week.</p>
       </div>
-      <div id="googleMap2" class="col-md-5">
-        
+      <div class="col-md-5">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.3373518460994!2d103.77714231380455!3d1.5611599988615288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da6e862370f9f9%3A0xbd935e40353aaf21!2sLOST%20in%20JB!5e0!3m2!1sen!2smy!4v1597144650230!5m2!1sen!2smy" width="450" height="400" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
       </div>
     </div>
 
@@ -61,27 +61,3 @@
 <?php
   include "footer.php";
 ?>
-
-<script>
-function myMap() {
-var mapProp= {
-  center:new google.maps.LatLng(1.517253, 103.668024),
-  zoom:5,
-};
-var map = new google.maps.Map(document.getElementById("googleMap1"),mapProp);
-}
-</script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=myMap"></script>
-
-<script>
-function myMap() {
-var mapProp= {
-  center:new google.maps.LatLng(1.561335, 103.779370),
-  zoom:5,
-};
-var map = new google.maps.Map(document.getElementById("googleMap2"),mapProp);
-}
-</script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=myMap"></script>

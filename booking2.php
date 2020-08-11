@@ -15,7 +15,7 @@
     $date1 = $_POST['date1'];
     $created_date = date("Y-m-d H:i:s");
 
-    mysqli_query($link, "INSERT INTO booking (name, mobile, email, num_of_person, note, game_title, time_slot, date, created_date) VALUES ('$name', '$mobile', '$email', '$num_of_person', '$note', '$gameName', '$time_slot', $date1, '$created_date')") or die(mysqli_error($link));
+    mysqli_query($link, "INSERT INTO booking (name, mobile, email, num_of_person, note, game_title, time_slot, date, created_date) VALUES ('$name', '$mobile', '$email', '$num_of_person', '$note', '$gameName', '$time_slot', '$date1', '$created_date')") or die(mysqli_error($link));
 
     $result = sendmail("tanjingyi94@gmail.com", "Jannie", "Lost in JB - Receive a new booking ".date("Y-m-d H:i:s"), "<h2>Hello Jannie</h2><p>You just received a new booking.</p>");
 

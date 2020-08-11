@@ -13,6 +13,7 @@ include "db.php";
 </style>
 
 <main role="main">
+<div style="background-image: url('./uploads/contact_background.jpg'); width:100%; padding:5%; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
   <section class="jumbotron text-center">
     <div class="container">
@@ -49,7 +50,7 @@ include "db.php";
       </div>
     </div>
   </div>
-
+  </div>
 <?php
     include "footer.php";
 ?>

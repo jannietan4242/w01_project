@@ -1,25 +1,11 @@
 <?php
   include "backend_header.php";
   include "db.php";
-  
-  $item_per_page = 10;
-  $page   = isset($_GET['page'])?$_GET['page']:1;
-  $start = ($page - 1) * $item_per_page; //equation for calculating $start
 
   $q = isset($_GET['q'])?$_GET['q']:'';
   $startdate = isset($_GET['startdate'])?$_GET['startdate']:'';
   $enddate = isset($_GET['enddate'])?$_GET['enddate']:'';
   $filterByGame = isset($_GET['filterByGame'])?$_GET['filterByGame']:'';
-  $sortby = isset($_GET['sortby'])?$_GET['sortby']:'';
-
-  switch($sortby) {
-    case "":
-      $orderBy = "ORDER BY created_date DESC";
-      break;
-    case "idASC":
-      $orderBy = "ORDER BY created_date ASC";
-      break;
-  }
 
   $venue = [];
   $sql = mysqli_query($link,"SELECT * FROM venue WHERE is_deleted = 0");
@@ -30,16 +16,21 @@
     }
 
   //total rows
-  $sql = mysqli_query($link, "SELECT * FROM booking WHERE date BETWEEN '".$startdate."' AND '".$enddate."' OR game_title LIKE '%".$filterByGame."%' OR name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ");
-  $total_data_rows = mysqli_num_rows($sql);
-  $total_pages = ceil( $total_data_rows / $item_per_page );
 
-  //search bar
-  if(!empty($q)) {
-    $sql = mysqli_query($link, "SELECT * FROM booking WHERE date BETWEEN '".$startdate."' AND '".$enddate."' OR game_title LIKE '%".$filterByGame."%' OR name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ".$orderBy." LIMIT ".$start.",".$item_per_page);
-  } else {
-    $sql = mysqli_query($link, "SELECT * FROM booking ".$orderBy." LIMIT ".$start.",".$item_per_page);
+  $sqlString = "SELECT * FROM booking WHERE 1 ";
+
+  if(!empty($startdate) && !empty($enddate)) {
+      $sqlString .= "AND (date BETWEEN '".$startdate."' AND '".$enddate."') ";
   }
+
+  if(!empty($filterByGame)) {
+      $sqlString .= "AND (game_title LIKE '%".$filterByGame."%') ";
+  }
+  if(!empty($q)) {
+      $sqlString .= "AND (name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%') ";
+  }
+
+  $sql = mysqli_query($link, $sqlString);
     
 ?>
 
@@ -111,20 +102,11 @@
           </select>
 
           <button type="submit" class="btn btn-primary">Search</button>
-          <?php
-          if(!empty($q)) {
-            echo "Total ".mysqli_num_rows($sql)." data have been found.";
-          }
-          ?>
+         
         </form>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-
-          <select name="sortby" onchange="changeSort(this.value)">
-              <option value="">-Sort By Latest to Oldest-</option>
-              <option value="idASC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='idASC'?'selected="selected"':''?>>-Sort By Oldest to Latest-</option>
-          </select>
-            <a href="game_export.php" class="btn btn-sm btn-outline-secondary">Export</a>
+            <a href="booking_export.php" class="btn btn-sm btn-outline-secondary">Export</a>
           </div>
          
         </div>
@@ -145,6 +127,7 @@
               <th width="15%">Game room</th>
               <th>Date</th>
               <th>Time</th>
+              <th>Booking Date</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -164,6 +147,7 @@
               <td><?=$row['game_title']?></td>
               <td><?=$row['date']?></td>
               <td><?=$row['time_slot']?></td>
+              <td><?=$row['created_date']?></td>
               
               <td>
                 <div><button class="btn btn-warning" style="width: 100px;" id="c<?=$row['id']?>" onclick="toggleDeleteBooking('<?=$row['id']?>')"><?=$row['is_deleted']?'cancelled':'confirmed'?></button></div>
@@ -178,50 +162,11 @@
         </table>
         
         </form>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <?php
-            if($page > 1) {
-            ?>
-            <li class="page-item"><a class="page-link" href="booking_mng.php?page=<?=$page-1?>">Previous</a></li>
-            <?php
-            }
-
-            for($i=1; $i <= $total_pages; $i++) {
-            ?>
-            <li class="page-item <?=$i == $page?'active':''?>"><a class="page-link" href="booking_mng.php?page=<?=$i?>"><?=$i?></a></li>
-            <?php
-            }
-            ?>            
-            <?php
-            if($page < $total_pages) {
-            ?>
-            <li class="page-item"><a class="page-link" href="booking_mng.php?page=<?=$page+1?>">Next</a></li>
-            <?php
-            }
-            ?>
-          </ul>
-        </nav>
 
       </div>
     </main>
   </div>
 </div>
-
-<script>
-  function changeSort(val){
-
-    switch(val){
-      case "":
-        location.href='booking_mng.php';
-        break;
-      case "idASC":
-        location.href='booking_mng.php?sortby=idASC';
-        break;
-    }
-
-  }
-</script>
 
 <?php
   include "backend_footer.php";

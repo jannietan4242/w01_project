@@ -40,7 +40,7 @@ include "db.php";
 </style>
 
 <main role="main">
-
+<div style="background-image: url('./uploads/contact_background.jpg'); width:100%; padding:5%; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
   <div class="album">
   
     <div class="container">
@@ -130,7 +130,7 @@ include "db.php";
 
         <input type="hidden" id="gameName" name="gameName">
         <input type="hidden" id="time1" name="time1">
-        <input type="text" id="date1" name="date1">
+        <input type="hidden" id="date1" name="date1">
 
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -176,7 +176,7 @@ include "db.php";
       </form>
     </div>
   </div>
-  
+  </div>
 </div>
 
 <?php
@@ -186,15 +186,15 @@ include "db.php";
 <script>
 
     function openModal(game_title,time_slot,min,max) {
-
+        var currentDate = $("#date").val();
         $("#gameName").val(game_title);
         $("#gameName1").text(game_title);
         $("#time").text(time_slot);
         $("#time1").val(time_slot);
-        // $("#date1").val()= $("#date").val();        
-        document.getElementById("date1").value = document.getElementById("date").value; 
+        $("#date1").val(currentDate);        
+        // document.getElementById("date1").value = document.getElementById("date").value; 
         // document.getElementById("date2").value = document.getElementById("date").value; 
-        $("#date2").val(document.getElementById("date").value);
+        $("#date2").text(currentDate);
 
         $("#min").text(min);
         $("#max").text(max);

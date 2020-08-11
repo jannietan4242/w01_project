@@ -11,15 +11,15 @@
     $from = $_POST['from'];
        
 
-  $sql = mysqli_query($link, "SELECT * FROM customer WHERE email='$email'") or die(mysqli_error($link));
+  $sql = mysqli_query($link, "SELECT * FROM admin WHERE email='$email'") or die(mysqli_error($link));
     if(mysqli_num_rows($sql) > 0) {
       echo "email has been registered";
       exit;
     }
 
-  mysqli_query($link, "INSERT INTO customer (name, email, password, created_date) VALUES ('$name','$email','$password', '$created_date')") or die(mysqli_error($link));
+  mysqli_query($link, "INSERT INTO admin (name, email, password, created_date) VALUES ('$name','$email','$password', '$created_date')") or die(mysqli_error($link));
 
-  header("location: ".$from);
+  header("location: signin.php");
   }
 ?>
 
@@ -33,7 +33,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <title>Konfar Trading-Signup</title>
+    <title>Lost In JB-Signup</title>
    <!-- Custom styles for this template -->
    <link href="css/signin.css" rel="stylesheet">
   </head>
@@ -43,7 +43,7 @@
     <input type="hidden" name="from" value="<?=$_SERVER['HTTP_REFERER']?>"/>
     
   <img class="mb-4" src="/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-  <h1 class="h3 mb-3 font-weight-normal">Konfar Trading</h1>
+  <h1 class="h3 mb-3 font-weight-normal">Lost In JB</h1>
   <h1 class="h3 mb-3 font-weight-normal">Register Member</h1>
 
   <label for="name" class="sr-only">Name</label>
@@ -59,7 +59,7 @@
   <input type="password" id="repassword" class="form-control" placeholder="Confirm Password" required name="repassword">
   
   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-  <p>Already a member? <a href="signin.php">Sign in</a> here</p>
+  <p>Already a user? <a href="signin.php">Sign in</a> here</p>
   <p>Or <a href="index.php">View Homepage</a> here</p>
   <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
 </form>
