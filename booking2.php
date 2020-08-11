@@ -14,8 +14,6 @@
     $time_slot = $_POST['time1'];
     $date1 = $_POST['date1'];
     $created_date = date("Y-m-d H:i:s");
-    
-    // echo("INSERT INTO booking (name, mobile, email, num_of_person, note, game_title, time_slot,  created_date) VALUES ('$name', '$mobile', '$email', '$num_of_person', '$note', '$game_title', '$time_slot', '$created_date')");
 
     mysqli_query($link, "INSERT INTO booking (name, mobile, email, num_of_person, note, game_title, time_slot, date, created_date) VALUES ('$name', '$mobile', '$email', '$num_of_person', '$note', '$gameName', '$time_slot', $date1, '$created_date')") or die(mysqli_error($link));
 

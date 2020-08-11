@@ -6,7 +6,10 @@
   $page   = isset($_GET['page'])?$_GET['page']:1;
   $start = ($page - 1) * $item_per_page; //equation for calculating $start
 
-  $q      = isset($_GET['q'])?$_GET['q']:'';
+  $q = isset($_GET['q'])?$_GET['q']:'';
+  $startdate = isset($_GET['startdate'])?$_GET['startdate']:'';
+  $enddate = isset($_GET['enddate'])?$_GET['enddate']:'';
+  $filterByGame = isset($_GET['filterByGame'])?$_GET['filterByGame']:'';
   $sortby = isset($_GET['sortby'])?$_GET['sortby']:'';
 
   switch($sortby) {
@@ -15,12 +18,6 @@
       break;
     case "idASC":
       $orderBy = "ORDER BY created_date ASC";
-      break;
-    case "titleASC":
-      $orderBy = "ORDER BY title ASC";
-      break;
-    case "titleDESC":
-      $orderBy = "ORDER BY title DESC";
       break;
   }
 
@@ -33,13 +30,13 @@
     }
 
   //total rows
-  $sql = mysqli_query($link, "SELECT * FROM booking WHERE name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ");
+  $sql = mysqli_query($link, "SELECT * FROM booking WHERE date BETWEEN '".$startdate."' AND '".$enddate."' OR game_title LIKE '%".$filterByGame."%' OR name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ");
   $total_data_rows = mysqli_num_rows($sql);
   $total_pages = ceil( $total_data_rows / $item_per_page );
 
   //search bar
   if(!empty($q)) {
-    $sql = mysqli_query($link, "SELECT * FROM booking WHERE name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ".$orderBy." LIMIT ".$start.",".$item_per_page);
+    $sql = mysqli_query($link, "SELECT * FROM booking WHERE date BETWEEN '".$startdate."' AND '".$enddate."' OR game_title LIKE '%".$filterByGame."%' OR name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%' ".$orderBy." LIMIT ".$start.",".$item_per_page);
   } else {
     $sql = mysqli_query($link, "SELECT * FROM booking ".$orderBy." LIMIT ".$start.",".$item_per_page);
   }
@@ -93,9 +90,26 @@
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Booking list</h1>
+        <h2 class="h2">Booking list</h2>
         <form method="GET" action="booking_mng.php">
           <input type="search" name="q" placeholder="Search by name/mobile/email" value="<?=isset($_GET['q'])?$_GET['q']:''?>" />
+          <input type="date" id="startdate" name="startdate" placeholder="Start date" value="<?=isset($_GET['startdate'])?$_GET['startdate']:''?>"/>
+          <input type="date" id="enddate" name="enddate" placeholder="End date" value="<?=isset($_GET['startdate'])?$_GET['startdate']:''?>"/>
+
+          <select name="filterByGame">
+          <option value="">-All Game Rooms-</option>
+          <?php
+            $filterByGame = mysqli_query($link, "SELECT * FROM game WHERE is_deleted = 0");
+            if(mysqli_num_rows($filterByGame)>0) {
+              while($row1 = mysqli_fetch_array($filterByGame)){
+          ?>
+              <option value="<?=$row1['title']?>" <?=isset($_GET['filterByGame'])?$_GET['filterByGame']:''?>><?=$row1['title']?></option>
+          <?php
+            }
+          }
+          ?>
+          </select>
+
           <button type="submit" class="btn btn-primary">Search</button>
           <?php
           if(!empty($q)) {
@@ -105,12 +119,11 @@
         </form>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
+
           <select name="sortby" onchange="changeSort(this.value)">
               <option value="">-Sort By Latest to Oldest-</option>
               <option value="idASC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='idASC'?'selected="selected"':''?>>-Sort By Oldest to Latest-</option>
-              <option value="titleASC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='titleASC'?'selected="selected"':''?>>-Sort By Title alphabet ASC-</option>
-              <option value="titleDESC" <?=isset($_GET['sortby'])&&$_GET['sortby']=='titleDESC'?'selected="selected"':''?>>-Sort By Title alphabet DESC-</option>
-            </select>
+          </select>
             <a href="game_export.php" class="btn btn-sm btn-outline-secondary">Export</a>
           </div>
          
@@ -204,12 +217,6 @@
         break;
       case "idASC":
         location.href='booking_mng.php?sortby=idASC';
-        break;
-      case "titleASC":
-        location.href='booking_mng.php?sortby=titleASC';
-        break;
-      case "titleDESC":
-        location.href='booking_mng.php?sortby=titleDESC';
         break;
     }
 

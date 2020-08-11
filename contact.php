@@ -4,10 +4,11 @@
 ?>
 
 <main role="main">
-
+<div style="background-image: url('./uploads/contact_background.jpg'); width:100%; padding:5%; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
   <div class="text-center">
-    <h1 style="font-family:papyrus;">Contact us</h1><br>
-    <p style="font-family:papyrus;"><a href="#sutera" style="color:red;">Sutera</a> | <a href="#austin" style="color:red;">Mount Austin</a></p>
+    <h1 style="font-family:papyrus;">Lost In JB</h1><br>
+    <h1 style="font-family:papyrus;">Contact us:</h1><br>
+    <h3 style="font-family:papyrus;"><a href="#sutera" style="color:white;">Sutera</a> | <a href="#austin" style="color:white;">Mount Austin</a></h3>
     
   </div>
 
@@ -56,7 +57,7 @@
     <!-- /END THE FEATURETTES -->
 
   </div><!-- /.container -->
-
+  </div>
 <?php
   include "footer.php";
 ?>

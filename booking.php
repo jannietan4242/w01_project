@@ -3,6 +3,41 @@ include "header.php";
 include "db.php";
     $sql = mysqli_query($link, "SELECT * FROM game WHERE is_deleted = 0 AND is_hide = 0 ORDER BY created_date DESC") or die (mysqli_error($link));
 ?>
+<style>
+.timeslot {
+    display: block;
+    width: 100%;
+    border: 5px;
+    border-radius: 5px;
+    background-color: green;
+    color: white;
+    margin: 10px;
+    padding: 5px 100px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .timeslot:hover {
+    background-color: orange;
+  }
+
+  .pickADate {
+    color:red;
+    margin:50px;
+    margin-top:0px;
+    font-family:'papyrus';
+    font-weight:bold;
+    font-size: 130%;
+  }
+
+  .card-text {
+  color:black;
+  font-size: large;
+  font-family:'papyrus';
+  font-weight: bold;
+  }
+</style>
 
 <main role="main">
 
@@ -10,7 +45,7 @@ include "db.php";
   
     <div class="container">
 
-        <div style="color:grey; margin:50px; margin-top:0px;">Pick a date: <input type="date" id="date" name="date"></div>
+        <div class="pickADate">Pick a date: <input type="date" id="date" name="date"></div>
 
       <div class="row">
       <?php
@@ -59,14 +94,18 @@ include "db.php";
               <p class="card-text text-center" style="color:grey;"><?=$row['title']?></p>
               <div class="justify-content-between align-items-center">
               <div class="row">
+              <div class="col-xs-12">
                <?php
                   foreach($timeslot as $v) {
                ?>
-                <div class="col-xs-12" style="display:block;"><button data-toggle="modal" data-target="#bookmodal" onclick="openModal('<?=$row['title']?>','<?=$v['starttime']?> - <?=$v['endtime']?> ','<?=$row['min']?>', '<?=$row['max']?>' )"><?=$v['starttime']?> - <?=$v['endtime']?></button></div>
+                
+                 <button class="timeslot" data-toggle="modal" data-target="#bookmodal" onclick="openModal('<?=$row['title']?>','<?=$v['starttime']?> - <?=$v['endtime']?> ','<?=$row['min']?>', '<?=$row['max']?>' )"><?=$v['starttime']?> - <?=$v['endtime']?></button>
+                
                 
               <?php
                   }
               ?>
+              </div>
                </div>
               </div>
             </div>
@@ -146,16 +185,6 @@ include "db.php";
 
 <script>
 
-    // function select_date(date) {
-       
-    //    var date = $("#date").val();        
-    
-    //    $.post("testing.php", {
-    //     date: date
-        
-    //    });
-    //  }
-
     function openModal(game_title,time_slot,min,max) {
 
         $("#gameName").val(game_title);
@@ -169,7 +198,8 @@ include "db.php";
 
         $("#min").text(min);
         $("#max").text(max);
-        
+        $("#num_per").attr('min',min);
+        $("#num_per").attr('max',max);
 
         $("#name").val('');
         $("#mobile").val('');

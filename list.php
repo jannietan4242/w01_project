@@ -3,6 +3,14 @@ include "header.php";
 include "db.php";
     $sql = mysqli_query($link, "SELECT * FROM game WHERE is_deleted = 0 AND is_hide = 0 ORDER BY created_date DESC") or die (mysqli_error($link));
 ?>
+<style>
+.card-text {
+  color:black;
+  font-size: large;
+  font-family:'papyrus';
+  font-weight: bold;
+}
+</style>
 
 <main role="main">
 
@@ -24,7 +32,7 @@ include "db.php";
           <div class="card mb-4 shadow-sm">
             <a href="detail.php?id=<?=$row['id']?>"><img src="<?=$row['photo']?>"/></a>
             <div class="card-body">
-              <p class="card-text text-center" style="color:grey;"><?=$row['title']?></p>
+              <p class="card-text text-center"><?=$row['title']?></p>
               <div class="d-flex justify-content-between align-items-center">
                 
                 

@@ -13,11 +13,16 @@
     <title>Lost in JB</title>
     <!-- Custom styles for this template -->
     <link href="css/carousel.css?v=0.01" rel="stylesheet">
-    
+    <style>
+      .navbar {
+        font-family:castellar;
+        color:red;
+      }
+    </style>
   </head>
   <body>
     <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="font-family:castellar;">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" >
     <a class="navbar-brand" href="index.php">Lost in JB</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
