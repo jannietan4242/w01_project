@@ -91,7 +91,7 @@ include "db.php";
           <div class="card mb-4 shadow-sm">
             <a href="detail.php?id=<?=$row['id']?>"><img src="<?=$row['photo']?>"/></a>
             <div class="card-body">
-              <p class="card-text text-center" style="color:grey;"><?=$row['title']?></p>
+              <p class="card-text text-center" style="color:red;"><?=$row['title']?></p>
               <div class="justify-content-between align-items-center">
               <div class="row">
               <div class="col-xs-12">

@@ -1,8 +1,7 @@
 <?php
   include "backend_header.php";
   include "db.php";
-              
-  // $sql = mysqli_query($link, "SELECT count(id) AS total, game_title FROM booking GROUP BY game_title ORDER BY total DESC") or die(mysqli_error($link));
+
 ?>
 
 <div class="container-fluid">
@@ -48,7 +47,7 @@
           </li>
         </ul>
       </div>
-    </nav>
+  </nav>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -61,6 +60,13 @@
         </div>
       </div>
       <h4>Booking Statistics</h4>
+
+      <input type="date" id="startdate" placeholder="Startdate" />
+      <input type="date" id="enddate" placeholder="end date" />
+      <a class="btn btn-primary" href="javascript: refreshChart();">Filter</a>
+
+      <div id="curve_chart" style="width: 100%; height: 500px"></div>
+
       <div id="piechart" style="width: 100%; height: 500px;"></div>
       
     </main>
@@ -68,71 +74,109 @@
 </div>
 
 <?php
-
-  // $blog_category_array = [];
-  // $blog_category_array[] = ["Category","Product Count"];
-
+  include "backend_footer.php";
+  // booking analysis
   // get latest date
   $latest_date = "";
   $sql = mysqli_query($link, "SELECT * FROM booking ORDER BY date DESC LIMIT 1");
-    if(mysqli_num_rows($sql) > 0) {
-      $row = mysqli_fetch_array($sql);
-
-      $latest_date = substr($row['date'],0,10);
-    }
+  if(mysqli_num_rows($sql) > 0) {
+    $row = mysqli_fetch_array($sql);
+    $latest_date = substr($row['date'],0,10);//YYYY-mm-dd
+  }
 
   $earliest_date = "";
   $sql = mysqli_query($link, "SELECT * FROM booking ORDER BY date ASC LIMIT 1");
-    if(mysqli_num_rows($sql) > 0) {
+  if(mysqli_num_rows($sql) > 0) {
+    $row = mysqli_fetch_array($sql);
+    $earliest_date = substr($row['date'],0,10);//YYYY-mm-dd
+  }
+
+  $start_date_ut = strtotime($earliest_date);
+  $end_date_ut   = strtotime($latest_date);
+
+  $dateArray = [];
+  $dateArray[] = ["Date", "Number of Booking"];
+
+  for($i = $start_date_ut; $i <= $end_date_ut; $i=$i+24*3600) {
+    
+    $total_count = 0;
+    $sql = mysqli_query($link, "SELECT COUNT(id) AS total_booking FROM booking WHERE date LIKE '".date("Y-m-d", $i)."%'");
+    if(mysqli_num_rows($sql) > 0){
       $row = mysqli_fetch_array($sql);
-
-      $earliest_date = substr($row['date'],0,10);
+      $total_count = !empty($row['total_booking'])?(int)$row['total_booking']:0;
     }
+    $dateArray[] = [ date("Y-m-d", $i), $total_count];
+  }
 
-    $start_date_ut = strtotime($earliest_date);
-    $end_date_ut = strtotime($latest_date);
-    
-    $dateArray = [];
-    
-    for($i = $start_date_ut; $i<=$end_date_ut; $i=$i+24*3600) {
-      $dataArray[] = date("Y-m-d", $i); 
+  // Game rooms statistics
+  $game_array = [];
+  $game_array[] = ["Game Rooms","Game Count"];
+
+  $sql = mysqli_query($link, "SELECT * FROM game ORDER BY title ASC");
+  if(mysqli_num_rows($sql) > 0) {
+    while($row1 = mysqli_fetch_array($sql)){
+      $count = 0;
+      $sql2 = mysqli_query($link, "SELECT COUNT(id) AS total_count FROM booking WHERE game_title = '".$row1['title']."'") or die(mysqli_error($link));
+      if(mysqli_num_rows($sql2) > 0) {
+        $row2 = mysqli_fetch_array($sql2);
+        $count = $row2['total_count'];
+      }
+
+      $game_array[] = [
+        $row1['title'],(int)$count
+      ];
     }
-
-      // while($row = mysqli_fetch_array($sql)) {
-
-      //   $count = 0;
-      //   $sql2 = mysqli_query($link, "SELECT COUNT(*) AS total_count FROM product WHERE product_category_id = '".$row['id']."'") or die(mysqli_error($link));
-      //   if(mysqli_num_rows($sql2) > 0) {
-      //     $row1 = mysqli_fetch_array($sql2);
-      //     $count = $row1['total_count'];
-      //   }
-
-      //   $blog_category_array[] = [
-      //     $row['title'], (int)$count
-      //   ];
-      // }
+  }
 ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
+    <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-
-        var data = google.visualization.arrayToDataTable(<?=json_encode($blog_category_array)?>);
+        var data = google.visualization.arrayToDataTable(<?=json_encode($dateArray)?>);
 
         var options = {
-          title: 'Booking by Game Rooms',
-          legend: { position: 'bottom'}
+          title: 'Booking Analysis',
+          curveType: 'function',
+          legend: { position: 'bottom' }
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var chart1 = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
-        chart.draw(data, options);
+        chart1.draw(data, options);
+
+
+
+        var data = google.visualization.arrayToDataTable(<?=json_encode($game_array)?>);
+
+        var options = {
+          title: 'Game Rooms Statistics'
+        };
+
+        var chart2 = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart2.draw(data, options);
       }
     </script>
+    <script>
+      function refreshChart() {
+        var startdate = $("#startdate").val();
+        var enddate = $("#enddate").val();
 
-<?php
-  include "backend_footer.php";
-?>
+        $.getJSON("dashboard_view_ajax.php?startdate="+startdate+'&enddate='+enddate, function(res){
+          var data = google.visualization.arrayToDataTable(res);
+
+          var options = {
+            title: 'Booking Analysis',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+          };
+
+          var chart1 = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+          chart1.draw(data, options);
+        })
+      }
+    </script>

@@ -5,7 +5,7 @@ include "db.php";
 ?>
 <style>
 .card-text {
-  color:black;
+  color:red;
   font-size: large;
   font-family:'papyrus';
   font-weight: bold;
