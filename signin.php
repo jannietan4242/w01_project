@@ -8,7 +8,7 @@
     $password = $_POST['password'];
     $from = $_POST['from'];
 
-    $sql = mysqli_query($link, "SELECT * FROM admin WHERE email='$email' AND password='$password'") or die(mysqli_error($link));
+    $sql = mysqli_query($link, "SELECT * FROM admin WHERE is_deleted = 0 AND email='$email' AND password='$password'") or die(mysqli_error($link));
       if(mysqli_num_rows($sql) > 0) {
       $row = mysqli_fetch_array($sql);
       
