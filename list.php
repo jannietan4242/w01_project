@@ -21,7 +21,7 @@ include "db.php";
     </div>
   </section>
 
-  <div id="list" class="album py-5">
+  <div id="list" class="album py-5" style="background-color:transparent;">
     <div class="container">
 
       <div class="row">

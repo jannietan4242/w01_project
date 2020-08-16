@@ -1,7 +1,9 @@
 <?php
 include "header.php";
 include "db.php";
-    $sql = mysqli_query($link, "SELECT * FROM game WHERE is_deleted = 0 AND is_hide = 0 ORDER BY created_date DESC") or die (mysqli_error($link));
+
+  $current_date = isset($_GET['date'])?$_GET['date']:date("Y-m-d");
+
 ?>
 <style>
 .timeslot {
@@ -41,17 +43,31 @@ include "db.php";
 
 <main role="main">
 <div style="background-image: url('./uploads/contact_background.jpg'); width:100%; padding:5%; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
-  <div class="album">
+  <div class="album" style="background-color:transparent;">
   
     <div class="container">
 
-        <div class="pickADate">Pick a date: <input type="date" id="date" name="date"></div>
+        <div class="pickADate">Pick a date: <input type="date" id="date" name="date" value="<?=$current_date?>"></div>
 
       <div class="row">
       <?php
+        $booking_list = [];
+        
+        $sql2 = mysqli_query($link, "SELECT * FROM booking WHERE date = ".$current_date." AND is_deleted = 0") or die (mysqli_error($link));
+          if(mysqli_num_rows($sql2) > 0) {
+            while($row2 = mysqli_fetch_array($sql2)){
+              
+              if(!isset($booking_list[$row2['game_id']])){
+                $booking_list[$row2['game_id']] = [];
+              }
+              $booking_list[$row2['game_id']][] = $row2['time_slot'];
 
-        if(mysqli_num_rows($sql) > 0) {
-        while($row = mysqli_fetch_array($sql)){
+            }
+          }
+
+        $sql = mysqli_query($link, "SELECT * FROM game WHERE is_deleted = 0 AND is_hide = 0 ORDER BY created_date DESC") or die (mysqli_error($link));
+          if(mysqli_num_rows($sql) > 0) {
+            while($row = mysqli_fetch_array($sql)){
 
             // $startTime = $row['start_time'];
             // $timestamp = strtotime("+".$row['game_duration']." minutes", strtotime($startTime));
@@ -87,7 +103,7 @@ include "db.php";
             }
 
       ?>
-        <div class="col-md-4">
+        <div class="col-md-4" >
           <div class="card mb-4 shadow-sm">
             <a href="detail.php?id=<?=$row['id']?>"><img src="<?=$row['photo']?>"/></a>
             <div class="card-body">
@@ -97,13 +113,18 @@ include "db.php";
               <div class="col-xs-12">
                <?php
                   foreach($timeslot as $v) {
+                    if(isset($booking_list[$row['id']]) && in_array($v['starttime']." - ".$v['endtime'], $booking_list[$row['id']])) {            
                ?>
-                
-                 <button class="timeslot" data-toggle="modal" data-target="#bookmodal" onclick="openModal('<?=$row['title']?>','<?=$v['starttime']?> - <?=$v['endtime']?> ','<?=$row['min']?>', '<?=$row['max']?>' )"><?=$v['starttime']?> - <?=$v['endtime']?></button>
+                  <a href="javascript:;" class="timeslot" style="background-color:grey; color:rgba(0,0,0,0.25)"><?=$v['starttime']?> - <?=$v['endtime']?></a>
+                <?php
+                    } else {
+                ?>
+                 <button class="timeslot" data-toggle="modal" data-target="#bookmodal" onclick="openModal('<?=$row['title']?>','<?=$v['starttime']?> - <?=$v['endtime']?> ','<?=$row['min']?>', '<?=$row['max']?>', '<?=$row['id']?>')"><?=$v['starttime']?> - <?=$v['endtime']?></button>
                 
                 
               <?php
                   }
+                }
               ?>
               </div>
                </div>
@@ -129,6 +150,7 @@ include "db.php";
         <h5 class="modal-title" id="modalTitle">Booking Game Room: <span type="text" id="gameName1"></span></h5>
 
         <input type="hidden" id="gameName" name="gameName">
+        <input type="hidden" id="game_id" name="game_id">
         <input type="hidden" id="time1" name="time1">
         <input type="hidden" id="date1" name="date1">
 
@@ -185,10 +207,11 @@ include "db.php";
 
 <script>
 
-    function openModal(game_title,time_slot,min,max) {
+    function openModal(game_title,time_slot,min,max,game_id) {
         var currentDate = $("#date").val();
         $("#gameName").val(game_title);
         $("#gameName1").text(game_title);
+        $("#game_id").val(game_id);
         $("#time").text(time_slot);
         $("#time1").val(time_slot);
         $("#date1").val(currentDate);        
@@ -200,6 +223,14 @@ include "db.php";
         $("#max").text(max);
         $("#num_per").attr('min',min);
         $("#num_per").attr('max',max);
+        $("#num_per").on('change',function(){
+          var currentValue = $(this).val();
+          if(currentValue < min || currentValue > max){
+            alert("Should be within range "+min+" ~ "+max);
+            $(this).val(min);
+          }
+
+        });
 
         $("#name").val('');
         $("#mobile").val('');

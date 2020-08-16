@@ -30,6 +30,7 @@
       $sqlString .= "AND (name LIKE '%".$q."%' OR mobile LIKE '%".$q."%' OR email LIKE '%".$q."%') ";
   }
 
+  $sqlString .= "ORDER BY id DESC";
   $sql = mysqli_query($link, $sqlString);
     
 ?>
